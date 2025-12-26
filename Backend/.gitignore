@@ -60,6 +60,11 @@ artifacts/
 *.snupkg
 **/packages/*
 
+# App Settings (sensitive data)
+**/appsettings.json
+**/appsettings.Development.json
+**/appsettings.Production.json
+
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
