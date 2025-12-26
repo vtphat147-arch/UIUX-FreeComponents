@@ -48,8 +48,6 @@ const Courses = () => {
     return () => clearTimeout(timeoutId)
   }, [searchTerm, selectedCategory])
 
-  const filteredCourses = courses
-
   const getLevelColor = (level: string) => {
     switch (level) {
       case 'Cơ bản': return 'bg-green-100 text-green-800'
@@ -148,7 +146,7 @@ const Courses = () => {
 
           {/* Results Count */}
           <div className="mt-4 text-sm text-gray-600">
-            Tìm thấy <span className="font-semibold text-primary-600">{filteredCourses.length}</span> khóa học
+            Tìm thấy <span className="font-semibold text-primary-600">{courses.length}</span> khóa học
           </div>
         </div>
       </section>
@@ -167,7 +165,7 @@ const Courses = () => {
               <h3 className="text-2xl font-semibold text-gray-700 mb-2">Lỗi</h3>
               <p className="text-gray-500">{error}</p>
             </div>
-          ) : filteredCourses.length === 0 ? (
+          ) : courses.length === 0 ? (
             <div className="text-center py-20">
               <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-2xl font-semibold text-gray-700 mb-2">Không tìm thấy khóa học</h3>
@@ -178,7 +176,7 @@ const Courses = () => {
               ? 'grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
               : 'space-y-4'
             }>
-              {filteredCourses.map((course, index) => (
+              {courses.map((course, index) => (
                 <motion.div
                   key={course.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -256,16 +254,6 @@ const Courses = () => {
         </div>
       </section>
 
-      {/* Load More / Pagination */}
-      {filteredCourses.length > 0 && (
-        <section className="py-8">
-          <div className="container mx-auto px-4 text-center">
-            <button className="btn-secondary">
-              Xem thêm khóa học
-            </button>
-          </div>
-        </section>
-      )}
     </div>
   )
 }

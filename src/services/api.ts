@@ -1,7 +1,8 @@
+/// <reference types="vite/client" />
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://localhost:5001/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://asleep-florenza-freddy336-4b76ee74.koyeb.app/api',
 })
 
 export const courseService = {
