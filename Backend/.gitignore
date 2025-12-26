@@ -1,9 +1,7 @@
 **/bin/
 **/obj/
 **/.vs/
-**/.vscode/
-**/*.user
-**/*.suo
+*.user
+*.suo
 **/appsettings.json
 **/appsettings.Development.json
-**/appsettings.Production.json

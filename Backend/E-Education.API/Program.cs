@@ -21,19 +21,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        var allowedOrigins = new List<string>
-        {
-            "http://localhost:5173",
-            "http://localhost:3000"
-        };
-        
-        var frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL");
-        if (!string.IsNullOrEmpty(frontendUrl))
-        {
-            allowedOrigins.Add(frontendUrl);
-        }
-        
-        policy.WithOrigins(allowedOrigins.ToArray())
+        policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -42,34 +30,14 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
-
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.UseHttpsRedirection();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapControllers();
-
-if (!app.Environment.IsDevelopment())
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var services = scope.ServiceProvider;
-        try
-        {
-            var context = services.GetRequiredService<ApplicationDbContext>();
-            context.Database.Migrate();
-        }
-        catch (Exception ex)
-        {
-            var logger = services.GetRequiredService<ILogger<Program>>();
-            logger.LogError(ex, "An error occurred migrating the database.");
-        }
-    }
-}
 
 app.Run();

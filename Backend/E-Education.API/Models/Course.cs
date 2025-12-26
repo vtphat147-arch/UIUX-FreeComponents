@@ -24,7 +24,6 @@ namespace E_Education.API.Models
         public decimal Rating { get; set; }
 
         public int Reviews { get; set; }
-
         public int Students { get; set; }
 
         [Column(TypeName = "decimal(12,2)")]
@@ -50,7 +49,6 @@ namespace E_Education.API.Models
         public string? Description { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }
