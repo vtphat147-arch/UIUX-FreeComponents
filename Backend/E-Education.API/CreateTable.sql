@@ -1,6 +1,3 @@
--- Script tạo bảng Courses
--- Chạy script này TRƯỚC KHI insert data
-
 CREATE TABLE IF NOT EXISTS "Courses" (
     "Id" SERIAL PRIMARY KEY,
     "Title" VARCHAR(200) NOT NULL,
@@ -21,7 +18,6 @@ CREATE TABLE IF NOT EXISTS "Courses" (
     "UpdatedAt" TIMESTAMP NOT NULL
 );
 
--- Tạo index cho Category và Title để tìm kiếm nhanh hơn
 CREATE INDEX IF NOT EXISTS "IX_Courses_Category" ON "Courses" ("Category");
 CREATE INDEX IF NOT EXISTS "IX_Courses_Title" ON "Courses" ("Title");
 

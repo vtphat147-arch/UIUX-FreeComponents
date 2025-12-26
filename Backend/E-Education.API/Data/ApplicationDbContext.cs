@@ -16,7 +16,6 @@ namespace E_Education.API.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure Course entity
             modelBuilder.Entity<Course>(entity =>
             {
                 entity.ToTable("Courses");
@@ -26,4 +25,3 @@ namespace E_Education.API.Data
         }
     }
 }
-

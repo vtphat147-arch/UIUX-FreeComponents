@@ -54,4 +54,3 @@ namespace E_Education.API.Models
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }
-
