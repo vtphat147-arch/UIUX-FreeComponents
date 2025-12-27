@@ -6,7 +6,7 @@ import Header from '../cpnents/Header'
 import { designService, DesignComponent } from '../services/api'
 
 const Homepage = () => {
-  const [categories, setCategories] = useState<{ name: string; icon: any; color: string; components: DesignComponent[] }[]>([])
+  const [categories, setCategories] = useState<{ name: string; label: string; icon: any; color: string; components: DesignComponent[] }[]>([])
   const [loading, setLoading] = useState(true)
 
   const categoryConfig = [
