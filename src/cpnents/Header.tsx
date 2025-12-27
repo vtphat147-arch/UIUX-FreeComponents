@@ -1,4 +1,4 @@
-import { BookOpen } from "lucide-react"
+import { Code2 } from "lucide-react"
 import { Link } from "react-router-dom"
     
 const Header = () => {
@@ -6,19 +6,19 @@ const Header = () => {
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <BookOpen className="w-8 h-8 text-primary-600" />
-            <span className="text-2xl font-bold text-primary-600">E-Education</span>
-          </div>
+          <Link to="/" className="flex items-center space-x-2">
+            <Code2 className="w-8 h-8 text-primary-600" />
+            <span className="text-2xl font-bold text-primary-600">UI Components</span>
+          </Link>
           <nav className="hidden md:flex items-center space-x-8">
             <Link to="/" className="text-gray-700 hover:text-primary-600 transition-colors">Trang chủ</Link>
-            <Link to="/courses" className="text-gray-700 hover:text-primary-600 transition-colors">Khóa học</Link>
-            <a href="#" className="text-gray-700 hover:text-primary-600 transition-colors">Về chúng tôi</a>
-            <a href="#" className="text-gray-700 hover:text-primary-600 transition-colors">Liên hệ</a>
+            <Link to="/components" className="text-gray-700 hover:text-primary-600 transition-colors">Components</Link>
+            <a href="#" className="text-gray-700 hover:text-primary-600 transition-colors">Templates</a>
+            <a href="#" className="text-gray-700 hover:text-primary-600 transition-colors">About</a>
           </nav>
           <div className="flex items-center space-x-4">
-            <button className="text-gray-700 hover:text-primary-600 transition-colors">Đăng nhập</button>
-            <button className="btn-primary">Đăng ký</button>
+            <button className="text-gray-700 hover:text-primary-600 transition-colors">Login</button>
+            <button className="btn-primary">Get Started</button>
           </div>
         </div>
       </div>

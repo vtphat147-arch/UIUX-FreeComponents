@@ -5,15 +5,44 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'https://e-education-be.onrender.com/api',
 })
 
-export const courseService = {
-  getAllCourses: (search?: string, category?: string) => {
-    return api.get('/courses', { 
-      params: { search, category: category === 'all' ? undefined : category } 
+export interface DesignComponent {
+  id: number
+  name: string
+  category: string // header, footer, sidebar, layout, typography
+  type: string
+  preview: string
+  htmlCode: string
+  cssCode: string
+  jsCode?: string | null
+  description: string
+  tags?: string | null
+  framework?: string | null
+  views: number
+  likes: number
+  createdAt: string
+  updatedAt: string
+}
+
+export const designService = {
+  getAllComponents: (category?: string, type?: string, search?: string, tags?: string) => {
+    return api.get<DesignComponent[]>('/components', { 
+      params: { category, type, search, tags } 
     }).then(res => res.data)
   },
   
-  getCourseById: (id: number) => {
-    return api.get(`/courses/${id}`).then(res => res.data)
+  getComponentById: (id: number) => {
+    return api.get<DesignComponent>(`/components/${id}`).then(res => res.data)
   },
-}
 
+  getCategories: () => {
+    return api.get<string[]>('/components/categories').then(res => res.data)
+  },
+
+  getTypesByCategory: (category: string) => {
+    return api.get<string[]>(`/components/types/${category}`).then(res => res.data)
+  },
+
+  likeComponent: (id: number) => {
+    return api.post(`/components/${id}/like`).then(res => res.data)
+  }
+}
