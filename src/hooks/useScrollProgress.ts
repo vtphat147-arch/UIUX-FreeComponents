@@ -5,6 +5,8 @@ export const useScrollProgress = () => {
   const [scrollY, setScrollY] = useState(0)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     const updateScrollProgress = () => {
       const windowHeight = window.innerHeight
       const documentHeight = document.documentElement.scrollHeight

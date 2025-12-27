@@ -8,6 +8,8 @@ export const use3DScene = (_sceneType: 'particles' | 'geometric' | 'grid' | 'flu
   const animationIdRef = useRef<number | null>(null)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     // Scene setup
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(

@@ -16,6 +16,8 @@ const Homepage3D = () => {
 
   useEffect(() => {
     // Smooth scroll với Lenis - chỉ trên desktop
+    if (typeof window === 'undefined') return
+    
     const isMobile = window.innerWidth < 768
     if (!isMobile) {
       const lenis = new Lenis({

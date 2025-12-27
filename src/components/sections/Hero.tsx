@@ -19,7 +19,7 @@ export const Hero = () => {
             alpha: true,
             powerPreference: "high-performance"
           }}
-          dpr={Math.min(window.devicePixelRatio, 2)}
+          dpr={typeof window !== 'undefined' ? Math.min(window.devicePixelRatio, 2) : 1}
         >
           <Suspense fallback={<Loading3D />}>
             <PerspectiveCamera makeDefault position={[0, 0, 5]} />

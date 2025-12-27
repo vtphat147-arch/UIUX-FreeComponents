@@ -16,7 +16,7 @@ export const CTA = () => {
       <div className="absolute inset-0 z-0">
         <Canvas
           gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-          dpr={Math.min(window.devicePixelRatio, 2)}
+          dpr={typeof window !== 'undefined' ? Math.min(window.devicePixelRatio, 2) : 1}
         >
           <Suspense fallback={null}>
             <PerspectiveCamera makeDefault position={[0, 0, 10]} />
