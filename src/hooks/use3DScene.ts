@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
 
-export const use3DScene = (sceneType: 'particles' | 'geometric' | 'grid' | 'fluid' | 'waves' | 'cosmic') => {
+export const use3DScene = (_sceneType: 'particles' | 'geometric' | 'grid' | 'fluid' | 'waves' | 'cosmic') => {
   const sceneRef = useRef<THREE.Scene | null>(null)
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)

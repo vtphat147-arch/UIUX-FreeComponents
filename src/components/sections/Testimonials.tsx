@@ -1,7 +1,5 @@
-import { Canvas } from '@react-three/fiber'
-import { PerspectiveCamera } from '@react-three/drei'
 import { motion, useInView } from 'framer-motion'
-import { useRef, Suspense } from 'react'
+import { useRef } from 'react'
 import { Card } from '../ui/Card'
 import { Quote } from 'lucide-react'
 

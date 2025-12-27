@@ -25,7 +25,6 @@ const Homepage3D = () => {
         gestureOrientation: 'vertical',
         smoothWheel: true,
         wheelMultiplier: 1,
-        smoothTouch: false,
         touchMultiplier: 2,
       })
 
