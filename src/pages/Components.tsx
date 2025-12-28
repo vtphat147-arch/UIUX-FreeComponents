@@ -301,24 +301,65 @@ const Components = () => {
           )}
 
           {/* Pagination */}
-          {pagination.totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-8">
-              <button
-                onClick={() => setPagination(prev => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
-                disabled={pagination.page === 1}
-                className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-gray-900"
-              >
-                Trước
-              </button>
-              {[...Array(pagination.totalPages)].map((_, i) => {
-                const page = i + 1
-                if (page === 1 || page === pagination.totalPages || (page >= pagination.page - 1 && page <= pagination.page + 1)) {
+          {pagination.totalPages > 1 && (() => {
+            const currentPage = pagination.page
+            const totalPages = pagination.totalPages
+            const pages: (number | string)[] = []
+            const showEllipsis = totalPages > 7
+
+            if (!showEllipsis) {
+              // Hiển thị tất cả các trang nếu tổng số trang <= 7
+              for (let i = 1; i <= totalPages; i++) {
+                pages.push(i)
+              }
+            } else {
+              // Logic hiển thị với ellipsis
+              pages.push(1) // Luôn hiển thị trang đầu
+
+              if (currentPage <= 3) {
+                // Gần trang đầu: 1, 2, 3, 4, ..., totalPages
+                for (let i = 2; i <= 4; i++) {
+                  pages.push(i)
+                }
+                pages.push('ellipsis-start')
+                pages.push(totalPages)
+              } else if (currentPage >= totalPages - 2) {
+                // Gần trang cuối: 1, ..., totalPages-3, totalPages-2, totalPages-1, totalPages
+                pages.push('ellipsis-start')
+                for (let i = totalPages - 3; i <= totalPages; i++) {
+                  pages.push(i)
+                }
+              } else {
+                // Ở giữa: 1, ..., currentPage-1, currentPage, currentPage+1, ..., totalPages
+                pages.push('ellipsis-start')
+                for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+                  pages.push(i)
+                }
+                pages.push('ellipsis-end')
+                pages.push(totalPages)
+              }
+            }
+
+            return (
+              <div className="flex items-center justify-center gap-2 mt-8">
+                <button
+                  onClick={() => setPagination(prev => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-gray-900"
+                >
+                  Trước
+                </button>
+                {pages.map((pageItem, index) => {
+                  if (pageItem === 'ellipsis-start' || pageItem === 'ellipsis-end') {
+                    return <span key={`ellipsis-${index}`} className="px-2 text-gray-900">...</span>
+                  }
+                  const page = pageItem as number
                   return (
                     <button
                       key={page}
                       onClick={() => setPagination(prev => ({ ...prev, page }))}
                       className={`px-4 py-2 border rounded-lg transition-colors ${
-                        pagination.page === page
+                        currentPage === page
                           ? 'bg-indigo-600 text-white border-indigo-600'
                           : 'border-gray-300 hover:bg-gray-50 text-gray-900'
                       }`}
@@ -326,20 +367,17 @@ const Components = () => {
                       {page}
                     </button>
                   )
-                } else if (page === pagination.page - 2 || page === pagination.page + 2) {
-                  return <span key={page} className="px-2">...</span>
-                }
-                return null
-              })}
-              <button
-                onClick={() => setPagination(prev => ({ ...prev, page: Math.min(prev.totalPages, prev.page + 1) }))}
-                disabled={pagination.page === pagination.totalPages}
-                className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-gray-900"
-              >
-                Sau
-              </button>
-            </div>
-          )}
+                })}
+                <button
+                  onClick={() => setPagination(prev => ({ ...prev, page: Math.min(totalPages, prev.page + 1) }))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-gray-900"
+                >
+                  Sau
+                </button>
+              </div>
+            )
+          })()}
         </div>
       </section>
     </div>
