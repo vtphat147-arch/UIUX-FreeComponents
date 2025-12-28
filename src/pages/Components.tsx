@@ -9,7 +9,10 @@ import ComponentPreview from '../components/ComponentPreview'
 const Components = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedFramework, setSelectedFramework] = useState('all')
+  const [sortBy, setSortBy] = useState('popular')
   const [components, setComponents] = useState<DesignComponent[]>([])
+  const [pagination, setPagination] = useState({ page: 1, pageSize: 20, total: 0, totalPages: 0 })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -28,9 +31,20 @@ const Components = () => {
         setLoading(true)
         setError(null)
         const category = selectedCategory === 'all' ? undefined : selectedCategory
+        const framework = selectedFramework === 'all' ? undefined : selectedFramework
         const search = searchTerm.trim() || undefined
-        const data = await designService.getAllComponents(category, undefined, search)
-        setComponents(data)
+        const response = await designService.getAllComponents(
+          category, 
+          undefined, 
+          search, 
+          undefined, 
+          framework,
+          sortBy,
+          pagination.page,
+          pagination.pageSize
+        )
+        setComponents(response.data)
+        setPagination(response.pagination)
       } catch (err) {
         setError('Không thể tải danh sách components')
         console.error('Error fetching components:', err)
@@ -44,7 +58,7 @@ const Components = () => {
     }, 300)
 
     return () => clearTimeout(timeoutId)
-  }, [searchTerm, selectedCategory])
+  }, [searchTerm, selectedCategory, selectedFramework, sortBy, pagination.page])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
@@ -100,9 +114,48 @@ const Components = () => {
               </select>
             </div>
 
+            {/* Filters Row */}
+            <div className="grid md:grid-cols-3 gap-4 mb-4">
+              {/* Sort By */}
+              <select
+                value={sortBy}
+                onChange={(e) => {
+                  setSortBy(e.target.value)
+                  setPagination(prev => ({ ...prev, page: 1 }))
+                }}
+                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white/50 backdrop-blur-sm transition-all duration-300"
+              >
+                <option value="popular">Phổ biến nhất</option>
+                <option value="newest">Mới nhất</option>
+                <option value="mostLiked">Được yêu thích nhất</option>
+                <option value="name">Tên A-Z</option>
+              </select>
+
+              {/* Framework Filter */}
+              <select
+                value={selectedFramework}
+                onChange={(e) => {
+                  setSelectedFramework(e.target.value)
+                  setPagination(prev => ({ ...prev, page: 1 }))
+                }}
+                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white/50 backdrop-blur-sm transition-all duration-300"
+              >
+                <option value="all">Tất cả Framework</option>
+                <option value="react">React</option>
+                <option value="vue">Vue</option>
+                <option value="html">HTML</option>
+                <option value="tailwind">Tailwind</option>
+              </select>
+            </div>
+
             {/* Results Count */}
             <div className="text-sm text-gray-600 text-center">
-              Tìm thấy <span className="font-semibold text-indigo-600">{components.length}</span> components
+              Tìm thấy <span className="font-semibold text-indigo-600">{pagination.total}</span> components
+              {pagination.totalPages > 1 && (
+                <span className="ml-2">
+                  (Trang {pagination.page}/{pagination.totalPages})
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -201,6 +254,47 @@ const Components = () => {
                   </div>
                 </motion.div>
               ))}
+            </div>
+          )}
+
+          {/* Pagination */}
+          {pagination.totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-8">
+              <button
+                onClick={() => setPagination(prev => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
+                disabled={pagination.page === 1}
+                className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              >
+                Trước
+              </button>
+              {[...Array(pagination.totalPages)].map((_, i) => {
+                const page = i + 1
+                if (page === 1 || page === pagination.totalPages || (page >= pagination.page - 1 && page <= pagination.page + 1)) {
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => setPagination(prev => ({ ...prev, page }))}
+                      className={`px-4 py-2 border rounded-lg transition-colors ${
+                        pagination.page === page
+                          ? 'bg-indigo-600 text-white border-indigo-600'
+                          : 'border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                } else if (page === pagination.page - 2 || page === pagination.page + 2) {
+                  return <span key={page} className="px-2">...</span>
+                }
+                return null
+              })}
+              <button
+                onClick={() => setPagination(prev => ({ ...prev, page: Math.min(prev.totalPages, prev.page + 1) }))}
+                disabled={pagination.page === pagination.totalPages}
+                className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              >
+                Sau
+              </button>
             </div>
           )}
         </div>

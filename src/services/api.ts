@@ -23,10 +23,31 @@ export interface DesignComponent {
   updatedAt: string
 }
 
+export interface ComponentsResponse {
+  data: DesignComponent[]
+  pagination: {
+    page: number
+    pageSize: number
+    total: number
+    totalPages: number
+  }
+}
+
 export const designService = {
-  getAllComponents: (category?: string, type?: string, search?: string, tags?: string) => {
-    return api.get<DesignComponent[]>('/components', { 
-      params: { category, type, search, tags } 
+  getAllComponents: (
+    category?: string, 
+    type?: string, 
+    search?: string, 
+    tags?: string,
+    framework?: string,
+    sortBy?: string,
+    page?: number,
+    pageSize?: number,
+    minViews?: number,
+    minLikes?: number
+  ) => {
+    return api.get<ComponentsResponse>('/components', { 
+      params: { category, type, search, tags, framework, sortBy, page, pageSize, minViews, minLikes } 
     }).then(res => res.data)
   },
   

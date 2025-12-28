@@ -23,10 +23,10 @@ const Homepage = () => {
         setLoading(true)
         const categoryData = await Promise.all(
           categoryConfig.map(async (config) => {
-            const components = await designService.getAllComponents(config.name)
+            const response = await designService.getAllComponents(config.name, undefined, undefined, undefined, undefined, 'popular', 1, 3)
             return {
               ...config,
-              components: components.slice(0, 3) // Lấy 3 component đầu tiên
+              components: response.data // Lấy 3 component đầu tiên
             }
           })
         )

@@ -38,9 +38,9 @@ const ComponentDetail = () => {
         
         // Fetch related components cùng category
         if (data.category) {
-          const related = await designService.getAllComponents(data.category)
+          const response = await designService.getAllComponents(data.category, undefined, undefined, undefined, undefined, 'popular', 1, 10)
           // Loại bỏ component hiện tại và lấy tối đa 4 components
-          const filtered = related
+          const filtered = response.data
             .filter(c => c.id !== data.id)
             .slice(0, 4)
           setRelatedComponents(filtered)
