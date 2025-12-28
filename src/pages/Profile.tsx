@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Heart, Eye, Edit2, Save, X, Mail } from 'lucide-react'
+import { Heart, Eye, Edit2, Save, X, Mail, Code2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Header from '../cpnents/Header'
 import { useAuth } from '../contexts/AuthContext'
 import { userService, UserProfile, Favorite, ViewHistoryItem } from '../services/userService'
 import { Link } from 'react-router-dom'
+import ComponentPreview from '../components/ComponentPreview'
 
 const Profile = () => {
   const { user } = useAuth()
@@ -243,25 +244,39 @@ const Profile = () => {
                       key={favorite.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all"
+                      className="bg-white/80 backdrop-blur-xl rounded-xl shadow-lg border border-white/20 overflow-hidden hover:shadow-xl transition-all flex flex-col group"
                     >
-                      <Link to={`/components/${favorite.componentId}`}>
-                        <div className="relative aspect-video bg-gradient-to-br from-gray-100 to-gray-200">
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-gray-400 text-sm">Preview</span>
+                      <Link to={`/components/${favorite.componentId}`} className="block">
+                        <div className="relative w-full aspect-video bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+                          {favorite.component.htmlCode && favorite.component.cssCode ? (
+                            <ComponentPreview
+                              htmlCode={favorite.component.htmlCode}
+                              cssCode={favorite.component.cssCode}
+                              jsCode={favorite.component.jsCode || undefined}
+                              name={favorite.component.name}
+                              height={160}
+                              lazy={true}
+                            />
+                          ) : (
+                            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                              <Code2 className="w-12 h-12 text-gray-400" />
+                            </div>
+                          )}
+                          <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold z-10">
+                            {favorite.component.category}
                           </div>
                         </div>
                       </Link>
-                      <div className="p-4">
+                      <div className="p-4 flex flex-col flex-1">
                         <Link to={`/components/${favorite.componentId}`}>
-                          <h3 className="font-bold text-gray-900 mb-2 hover:text-indigo-600 transition-colors">
+                          <h3 className="font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-indigo-600 transition-colors">
                             {favorite.component.name}
                           </h3>
                         </Link>
-                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                        <p className="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">
                           {favorite.component.description}
                         </p>
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-200">
                           <span className="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full">
                             {favorite.component.category}
                           </span>
@@ -270,7 +285,7 @@ const Profile = () => {
                               e.preventDefault()
                               handleRemoveFavorite(favorite.componentId)
                             }}
-                            className="text-red-500 hover:text-red-700 transition-colors"
+                            className="text-red-500 hover:text-red-700 transition-colors p-1 hover:bg-red-50 rounded"
                           >
                             <Heart className="w-5 h-5 fill-current" />
                           </button>

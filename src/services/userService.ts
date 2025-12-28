@@ -28,9 +28,14 @@ export interface Favorite {
     category: string
     type: string
     preview: string
+    htmlCode: string
+    cssCode: string
+    jsCode?: string | null
     description: string
     views: number
     likes: number
+    tags?: string | null
+    framework?: string | null
   }
   createdAt: string
 }
@@ -44,9 +49,14 @@ export interface ViewHistoryItem {
     category: string
     type: string
     preview: string
+    htmlCode: string
+    cssCode: string
+    jsCode?: string | null
     description: string
     views: number
     likes: number
+    tags?: string | null
+    framework?: string | null
   }
   viewedAt: string
 }
