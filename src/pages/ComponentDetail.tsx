@@ -387,27 +387,33 @@ const ComponentDetail = () => {
                 >
                   <Link
                     to={`/components/${related.id}`}
-                    className="block bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 overflow-hidden hover:shadow-2xl transition-all duration-300"
+                    className="block bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col"
                   >
-                    <div className="relative h-40 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-                      <img
-                        src={related.preview}
-                        alt={related.name}
-                        className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none'
-                        }}
-                      />
-                      <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    <div className="relative w-full aspect-video bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+                      {related.htmlCode && related.cssCode ? (
+                        <ComponentPreview
+                          htmlCode={related.htmlCode}
+                          cssCode={related.cssCode}
+                          jsCode={related.jsCode || undefined}
+                          name={related.name}
+                          height={160}
+                          lazy={true}
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                          <Code2 className="w-12 h-12 text-gray-400" />
+                        </div>
+                      )}
+                      <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold z-10">
                         {related.category}
                       </div>
                     </div>
-                    <div className="p-5">
+                    <div className="p-5 flex flex-col flex-1">
                       <h3 className="font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-indigo-600 transition-colors">
                         {related.name}
                       </h3>
-                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">{related.description}</p>
-                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                      <p className="text-sm text-gray-600 mb-3 line-clamp-2 flex-1">{related.description}</p>
+                      <div className="flex items-center gap-4 text-xs text-gray-500 mt-auto pt-3 border-t border-gray-200">
                         <div className="flex items-center gap-1">
                           <Eye className="w-4 h-4" />
                           <span>{related.views}</span>
