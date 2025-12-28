@@ -59,13 +59,11 @@ const Components = () => {
         const search = searchTerm.trim() || undefined
         const response = await designService.getAllComponents(
           category, 
-          undefined, 
+          undefined, // type
           search, 
-          undefined, 
+          undefined, // tags
           framework,
-          undefined, // minViews
-          undefined, // minLikes
-          sortBy,
+          sortBy, // sortBy parameter
           pagination.page,
           pagination.pageSize
         )
