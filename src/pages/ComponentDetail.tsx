@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Eye, Heart, Copy, Check, ExternalLink, Sparkles, Code2 } from 'lucide-react'
+import { ArrowLeft, Eye, Heart, Copy, Check, Sparkles, Code2, Maximize2 } from 'lucide-react'
 import Header from '../cpnents/Header'
 import { designService, DesignComponent } from '../services/api'
 import { useAuth } from '../contexts/AuthContext'
@@ -11,6 +11,7 @@ import Comments from '../components/Comments'
 import ShareDropdown from '../components/ShareDropdown'
 import ExportDropdown from '../components/ExportDropdown'
 import FrameworkCodeGenerator from '../components/FrameworkCodeGenerator'
+import FullscreenPreview from '../components/FullscreenPreview'
 
 const ComponentDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -22,6 +23,7 @@ const ComponentDetail = () => {
   const [copied, setCopied] = useState<string | null>(null)
   const [isFavorited, setIsFavorited] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
+  const [isFullscreenPreview, setIsFullscreenPreview] = useState(false)
   const { isAuthenticated } = useAuth()
 
   useEffect(() => {
@@ -263,7 +265,16 @@ const ComponentDetail = () => {
                   <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
                   <h3 className="ml-3 text-lg font-bold text-gray-900">Live Preview</h3>
                 </div>
-                <ExternalLink className="w-4 h-4 text-gray-400" />
+                <motion.button
+                  onClick={() => setIsFullscreenPreview(true)}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-600 hover:text-gray-900"
+                  title="Phóng to preview"
+                  aria-label="Fullscreen preview"
+                >
+                  <Maximize2 className="w-5 h-5" />
+                </motion.button>
               </div>
               <div className="p-6 bg-gradient-to-br from-gray-100 via-gray-50 to-white flex-1 flex flex-col">
                 <iframe
@@ -495,6 +506,18 @@ const ComponentDetail = () => {
               ))}
             </div>
           </motion.div>
+        )}
+
+        {/* Fullscreen Preview Modal */}
+        {component && (
+          <FullscreenPreview
+            isOpen={isFullscreenPreview}
+            onClose={() => setIsFullscreenPreview(false)}
+            htmlCode={component.htmlCode}
+            cssCode={component.cssCode}
+            jsCode={component.jsCode || undefined}
+            name={component.name}
+          />
         )}
       </div>
     </div>
