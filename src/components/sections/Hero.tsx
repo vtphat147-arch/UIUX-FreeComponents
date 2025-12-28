@@ -1,14 +1,16 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import { motion } from 'framer-motion'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { ParticleSystem } from '../3d/ParticleSystem'
 import { GeometricShapes } from '../3d/GeometricShapes'
 import { Button } from '../ui/Button'
 import { Link } from 'react-router-dom'
 import { Loading3D } from '../3d/Loading3D'
+import Toast from '../Toast'
 
 export const Hero = () => {
+  const [showToast, setShowToast] = useState(false)
   return (
     <section className="relative h-screen w-full overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* 3D Background */}
@@ -69,7 +71,12 @@ export const Hero = () => {
             <Link to="/components">
               <Button variant="glow">Khám phá ngay</Button>
             </Link>
-            <Button variant="secondary">Xem Demo</Button>
+            <Button 
+              variant="secondary"
+              onClick={() => setShowToast(true)}
+            >
+              Xem Demo
+            </Button>
           </motion.div>
         </div>
       </div>
@@ -93,6 +100,14 @@ export const Hero = () => {
           />
         </motion.div>
       </motion.div>
+
+      {/* Toast Notification */}
+      <Toast
+        message="DM chưa xong"
+        isOpen={showToast}
+        onClose={() => setShowToast(false)}
+        duration={3000}
+      />
     </section>
   )
 }

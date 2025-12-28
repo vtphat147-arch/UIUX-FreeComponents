@@ -3,12 +3,14 @@ import { motion } from 'framer-motion'
 import { Palette, Check, ChevronDown } from 'lucide-react'
 import { useTheme, ColorTheme } from '../contexts/ThemeContext'
 import { useThemeClasses } from '../hooks/useThemeClasses'
+import Toast from './Toast'
 
 const ThemeSelector = () => {
   const { colorTheme, modeTheme, setColorTheme, toggleMode } = useTheme()
   const themeClasses = useThemeClasses()
   const [isOpen, setIsOpen] = useState(false)
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
+  const [showToast, setShowToast] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -76,7 +78,10 @@ const ThemeSelector = () => {
         ref={buttonRef}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          setIsOpen(!isOpen)
+          setShowToast(true)
+        }}
         className={`flex items-center gap-2 px-3 py-2 rounded-lg font-medium transition-all duration-300 ${
           isOpen
             ? `${themeClasses.bg} text-white shadow-lg`
@@ -136,6 +141,7 @@ const ThemeSelector = () => {
                 onClick={() => {
                   setColorTheme(theme.value)
                   setIsOpen(false)
+                  setShowToast(true)
                 }}
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-lg font-medium transition-all hover:bg-gray-50 dark:hover:bg-gray-700 ${
                   colorTheme === theme.value
@@ -158,6 +164,14 @@ const ThemeSelector = () => {
           </div>
         </motion.div>
       )}
+
+      {/* Toast Notification */}
+      <Toast
+        message="DM chưa xong"
+        isOpen={showToast}
+        onClose={() => setShowToast(false)}
+        duration={3000}
+      />
     </div>
   )
 }
