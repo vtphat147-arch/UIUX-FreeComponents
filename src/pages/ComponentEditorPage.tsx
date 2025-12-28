@@ -32,7 +32,6 @@ const ComponentEditorPage = () => {
   }
 
   const handleSave = async (component: Partial<DesignComponent>) => {
-    setSaving(true)
     try {
       // For now, just show success - in future, can integrate with API
       await new Promise(resolve => setTimeout(resolve, 1000))
@@ -40,8 +39,6 @@ const ComponentEditorPage = () => {
       // Navigate to component detail if ID is returned
     } catch (error) {
       throw error
-    } finally {
-      setSaving(false)
     }
   }
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Save, Play, Code2, Eye, FileCode, AlertCircle } from 'lucide-react'
+import { Save, Play, Code2, Eye, FileCode, AlertCircle, Check } from 'lucide-react'
 import { DesignComponent } from '../services/api'
 
 interface ComponentEditorProps {
