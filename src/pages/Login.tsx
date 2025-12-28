@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { LogIn, Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import Header from '../cpnents/Header'
+import GoogleLoginButton from '../components/GoogleLoginButton'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -11,7 +12,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const { login } = useAuth()
+  const [googleLoading, setGoogleLoading] = useState(false)
+  const { login, googleLogin } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,6 +28,20 @@ const Login = () => {
       setError(err.response?.data?.message || 'Đăng nhập thất bại. Vui lòng thử lại.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleGoogleLogin = async (idToken: string) => {
+    setError('')
+    setGoogleLoading(true)
+
+    try {
+      await googleLogin(idToken)
+      navigate('/')
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Đăng nhập Google thất bại. Vui lòng thử lại.')
+    } finally {
+      setGoogleLoading(false)
     }
   }
 
@@ -104,12 +120,34 @@ const Login = () => {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || googleLoading}
                 className="w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-indigo-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
               </button>
             </form>
+
+            {/* Divider */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">Hoặc</span>
+              </div>
+            </div>
+
+            {/* Google Login Button */}
+            <div className="mb-4">
+              <GoogleLoginButton
+                onSuccess={handleGoogleLogin}
+                onError={() => setError('Đăng nhập Google thất bại. Vui lòng thử lại.')}
+                disabled={loading || googleLoading}
+                text="signin_with"
+                size="large"
+                theme="outline"
+              />
+            </div>
 
             <div className="mt-6 text-center">
               <p className="text-gray-600">

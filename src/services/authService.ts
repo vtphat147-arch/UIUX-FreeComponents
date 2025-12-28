@@ -58,6 +58,12 @@ export const authService = {
   // Check if user is authenticated
   isAuthenticated(): boolean {
     return this.getToken() !== null
+  },
+
+  // Google Login
+  async googleLogin(idToken: string): Promise<AuthResponse> {
+    const response = await axios.post<AuthResponse>(`${baseURL}/auth/google`, { idToken })
+    return response.data
   }
 }
 
