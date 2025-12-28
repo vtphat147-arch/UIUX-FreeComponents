@@ -41,12 +41,12 @@ export const Testimonials = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-16 px-4"
         >
-          <h2 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-5xl md:text-7xl font-black mb-6 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent leading-tight pb-2">
             Khách hàng nói gì
           </h2>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-white/70 max-w-2xl mx-auto leading-relaxed">
             Những feedback từ developers và designers đã sử dụng
           </p>
         </motion.div>

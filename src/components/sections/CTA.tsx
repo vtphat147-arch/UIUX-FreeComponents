@@ -37,7 +37,7 @@ export const CTA = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2 }}
-            className="text-5xl md:text-7xl font-black mb-6 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+            className="text-5xl md:text-7xl font-black mb-6 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight pb-2"
           >
             Sẵn sàng bắt đầu?
           </motion.h2>
@@ -46,7 +46,7 @@ export const CTA = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.4 }}
-            className="text-xl md:text-2xl text-white/80 mb-10"
+            className="text-xl md:text-2xl text-white/80 mb-10 leading-relaxed"
           >
             Khám phá thư viện components với hàng nghìn mẫu thiết kế đẹp mắt
           </motion.p>
