@@ -134,7 +134,7 @@ const Components = () => {
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-300 bg-white shadow-sm hover:shadow-md appearance-none cursor-pointer text-base"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-300 bg-white shadow-sm hover:shadow-md appearance-none cursor-pointer text-base text-gray-900"
                   >
                     {categories.map((cat) => (
                       <option key={cat.value} value={cat.value}>
@@ -155,7 +155,7 @@ const Components = () => {
                       setSelectedFramework(e.target.value)
                       setPagination(prev => ({ ...prev, page: 1 }))
                     }}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-300 bg-white shadow-sm hover:shadow-md appearance-none cursor-pointer text-base"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-300 bg-white shadow-sm hover:shadow-md appearance-none cursor-pointer text-base text-gray-900"
                   >
                     <option value="all">Tất cả Framework</option>
                     <option value="react">React</option>
@@ -176,7 +176,7 @@ const Components = () => {
                       setSortBy(e.target.value)
                       setPagination(prev => ({ ...prev, page: 1 }))
                     }}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-300 bg-white shadow-sm hover:shadow-md appearance-none cursor-pointer text-base"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-300 bg-white shadow-sm hover:shadow-md appearance-none cursor-pointer text-base text-gray-900"
                   >
                     <option value="popular">Phổ biến nhất</option>
                     <option value="newest">Mới nhất</option>
@@ -190,12 +190,12 @@ const Components = () => {
             {/* Results Count - Centered */}
             <div className="text-center">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 rounded-full">
-                <span className="text-sm text-gray-700">
+                <span className="text-sm text-gray-900">
                   Tìm thấy <span className="font-bold text-indigo-600">{pagination.total}</span> components
                 </span>
                 {pagination.totalPages > 1 && (
-                  <span className="text-sm text-gray-500">
-                    • Trang <span className="font-semibold">{pagination.page}/{pagination.totalPages}</span>
+                  <span className="text-sm text-gray-700">
+                    • Trang <span className="font-semibold text-gray-900">{pagination.page}/{pagination.totalPages}</span>
                   </span>
                 )}
               </div>
@@ -306,7 +306,7 @@ const Components = () => {
               <button
                 onClick={() => setPagination(prev => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
                 disabled={pagination.page === 1}
-                className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-gray-900"
               >
                 Trước
               </button>
@@ -320,7 +320,7 @@ const Components = () => {
                       className={`px-4 py-2 border rounded-lg transition-colors ${
                         pagination.page === page
                           ? 'bg-indigo-600 text-white border-indigo-600'
-                          : 'border-gray-300 hover:bg-gray-50'
+                          : 'border-gray-300 hover:bg-gray-50 text-gray-900'
                       }`}
                     >
                       {page}
@@ -334,7 +334,7 @@ const Components = () => {
               <button
                 onClick={() => setPagination(prev => ({ ...prev, page: Math.min(prev.totalPages, prev.page + 1) }))}
                 disabled={pagination.page === pagination.totalPages}
-                className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-gray-900"
               >
                 Sau
               </button>
