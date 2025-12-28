@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Share2, Facebook, Twitter, Linkedin, Link2, Check, ChevronDown } from 'lucide-react'
 
@@ -12,6 +13,7 @@ const ShareDropdown = ({ componentId, componentName, componentUrl }: ShareDropdo
   const [isOpen, setIsOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -105,6 +107,7 @@ const ShareDropdown = ({ componentId, componentName, componentUrl }: ShareDropdo
   return (
     <div className="relative" ref={dropdownRef}>
       <motion.button
+        ref={buttonRef}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => setIsOpen(!isOpen)}
@@ -120,13 +123,13 @@ const ShareDropdown = ({ componentId, componentName, componentUrl }: ShareDropdo
       </motion.button>
 
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && buttonRef.current && typeof window !== 'undefined' && createPortal(
           <>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40"
+              className="fixed inset-0 z-[9998]"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
@@ -134,7 +137,13 @@ const ShareDropdown = ({ componentId, componentName, componentUrl }: ShareDropdo
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="absolute left-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
+              style={{
+                position: 'fixed',
+                left: buttonRef.current.getBoundingClientRect().left,
+                top: buttonRef.current.getBoundingClientRect().bottom + 8,
+                zIndex: 9999
+              }}
+              className="w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden"
             >
               <div className="p-2">
                 {shareOptions.map((option, index) => {
@@ -155,7 +164,8 @@ const ShareDropdown = ({ componentId, componentName, componentUrl }: ShareDropdo
                 })}
               </div>
             </motion.div>
-          </>
+          </>,
+          document.body
         )}
       </AnimatePresence>
     </div>

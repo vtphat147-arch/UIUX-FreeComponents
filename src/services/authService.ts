@@ -44,9 +44,13 @@ export const authService = {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
   },
 
-  // Get token from localStorage
+  // Get token from localStorage and set axios header
   getToken(): string | null {
-    return localStorage.getItem('auth_token')
+    const token = localStorage.getItem('auth_token')
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
+    return token
   },
 
   // Remove token
