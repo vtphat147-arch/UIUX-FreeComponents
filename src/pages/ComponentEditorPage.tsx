@@ -1,16 +1,14 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 import Header from '../cpnents/Header'
 import ComponentEditor from '../components/ComponentEditor'
 import { useAuth } from '../contexts/AuthContext'
-import { designService, DesignComponent } from '../services/api'
+import { DesignComponent } from '../services/api'
 
 const ComponentEditorPage = () => {
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
-  const [saving, setSaving] = useState(false)
 
   if (!isAuthenticated) {
     return (

@@ -274,15 +274,30 @@ const ComponentDetail = () => {
                   <ExternalLink className="w-4 h-4 text-gray-400" />
                 </div>
               </div>
-              <div className="p-6 bg-gradient-to-br from-gray-100 via-gray-50 to-white flex-1 flex flex-col">
+              <div className={`p-6 flex-1 flex flex-col transition-colors duration-300 ${
+                isDarkMode 
+                  ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
+                  : 'bg-gradient-to-br from-gray-100 via-gray-50 to-white'
+              }`}>
                 <iframe
                   srcDoc={`
                     <!DOCTYPE html>
                     <html>
                       <head>
-                        <style>${component.cssCode}</style>
+                        <style>
+                          ${isDarkMode ? `
+                            * {
+                              color-scheme: dark;
+                            }
+                            body {
+                              background-color: #111827;
+                              color: #f9fafb;
+                            }
+                          ` : ''}
+                          ${component.cssCode}
+                        </style>
                       </head>
-                      <body style="margin: 0; padding: 20px;">
+                      <body style="margin: 0; padding: 20px; ${isDarkMode ? 'background-color: #111827; color: #f9fafb;' : ''}">
                         ${component.htmlCode}
                         ${component.jsCode ? `<script>${component.jsCode}</script>` : ''}
                       </body>
