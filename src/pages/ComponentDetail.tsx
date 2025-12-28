@@ -19,6 +19,7 @@ const ComponentDetail = () => {
   const [activeTab, setActiveTab] = useState<'html' | 'css' | 'js'>('html')
   const [copied, setCopied] = useState<string | null>(null)
   const [isFavorited, setIsFavorited] = useState(false)
+  const [isLiked, setIsLiked] = useState(false)
   const { isAuthenticated } = useAuth()
 
   useEffect(() => {
@@ -29,11 +30,15 @@ const ComponentDetail = () => {
         const data = await designService.getComponentById(parseInt(id))
         setComponent(data)
         
-        // Check if favorited (if authenticated)
+        // Check if favorited and liked (if authenticated)
         if (isAuthenticated && data.id) {
           try {
-            const favorited = await userService.checkFavorite(data.id)
+            const [favorited, likedData] = await Promise.all([
+              userService.checkFavorite(data.id).catch(() => false),
+              designService.checkLike(data.id).catch(() => ({ isLiked: false }))
+            ])
             setIsFavorited(favorited)
+            setIsLiked(likedData.isLiked)
           } catch (err) {
             // Silent fail
           }

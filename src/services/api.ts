@@ -65,5 +65,9 @@ export const designService = {
 
   likeComponent: (id: number) => {
     return api.post(`/components/${id}/like`).then(res => res.data)
+  },
+
+  checkLike: (id: number) => {
+    return api.get<{ isLiked: boolean }>(`/components/${id}/like/check`).then(res => res.data)
   }
 }
