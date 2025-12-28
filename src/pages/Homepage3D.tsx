@@ -51,8 +51,8 @@ const Homepage3D = () => {
     // Fetch components
     const fetchComponents = async () => {
       try {
-        const data = await designService.getAllComponents()
-        setComponents(data)
+        const response = await designService.getAllComponents(undefined, undefined, undefined, undefined, undefined, 'popular', 1, 6)
+        setComponents(response.data)
       } catch (err) {
         console.error('Error fetching components:', err)
       }
