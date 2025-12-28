@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Search, Eye, Heart, Code2, Layout, Type, Menu, Navigation, Grid } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import Header from '../cpnents/Header'
 import { designService, DesignComponent } from '../services/api'
 import ComponentPreview from '../components/ComponentPreview'
 
 const Components = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    // Read category from URL query params
+    return searchParams.get('category') || 'all'
+  })
   const [selectedFramework, setSelectedFramework] = useState('all')
   const [sortBy, setSortBy] = useState('popular')
   const [components, setComponents] = useState<DesignComponent[]>([])
@@ -25,11 +29,31 @@ const Components = () => {
     { value: 'typography', label: 'Typography', icon: Type },
   ]
 
+  // Update URL when category changes
+  useEffect(() => {
+    if (selectedCategory === 'all') {
+      searchParams.delete('category')
+    } else {
+      searchParams.set('category', selectedCategory)
+    }
+    setSearchParams(searchParams, { replace: true })
+  }, [selectedCategory, searchParams, setSearchParams])
+
+  // Read category from URL on mount and when URL changes
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get('category')
+    if (categoryFromUrl && categoryFromUrl !== selectedCategory) {
+      setSelectedCategory(categoryFromUrl)
+      setPagination(prev => ({ ...prev, page: 1 }))
+    }
+  }, [searchParams])
+
   useEffect(() => {
     const fetchComponents = async () => {
       try {
         setLoading(true)
         setError(null)
+        // selectedCategory === 'all' means show ALL components, not filter by category
         const category = selectedCategory === 'all' ? undefined : selectedCategory
         const framework = selectedFramework === 'all' ? undefined : selectedFramework
         const search = searchTerm.trim() || undefined
@@ -39,6 +63,8 @@ const Components = () => {
           search, 
           undefined, 
           framework,
+          undefined, // minViews
+          undefined, // minLikes
           sortBy,
           pagination.page,
           pagination.pageSize

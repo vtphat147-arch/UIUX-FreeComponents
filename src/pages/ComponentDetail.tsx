@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Eye, Heart, Copy, Check, ExternalLink, Sparkles } from 'lucide-react'
+import { ArrowLeft, Eye, Heart, Copy, Check, ExternalLink, Sparkles, Code2 } from 'lucide-react'
 import Header from '../cpnents/Header'
 import { designService, DesignComponent } from '../services/api'
 import { useAuth } from '../contexts/AuthContext'
 import { userService } from '../services/userService'
+import ComponentPreview from '../components/ComponentPreview'
 
 const ComponentDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -38,7 +39,17 @@ const ComponentDetail = () => {
         
         // Fetch related components cùng category
         if (data.category) {
-          const response = await designService.getAllComponents(data.category, undefined, undefined, undefined, undefined, 'popular', 1, 10)
+          const response = await designService.getAllComponents(
+            data.category, 
+            undefined, 
+            undefined, 
+            undefined, 
+            undefined, 
+            undefined,
+            'popular', 
+            1, 
+            10
+          )
           // Loại bỏ component hiện tại và lấy tối đa 4 components
           const filtered = response.data
             .filter(c => c.id !== data.id)
