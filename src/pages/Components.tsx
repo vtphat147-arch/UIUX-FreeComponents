@@ -84,78 +84,97 @@ const Components = () => {
       </section>
 
       {/* Search and Filter Section */}
-      <section className="py-8 bg-white/80 backdrop-blur-xl shadow-lg border-b border-white/20 sticky top-20 z-40">
+      <section className="py-6 bg-white/95 backdrop-blur-xl shadow-lg border-b border-white/20 sticky top-[80px] z-40">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex gap-4 mb-4">
-              {/* Search Bar */}
-              <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <div className="max-w-7xl mx-auto">
+            {/* Search Bar - Full Width */}
+            <div className="mb-6">
+              <div className="relative max-w-2xl mx-auto">
+                <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   type="text"
-                  placeholder="Tìm kiếm component..."
+                  placeholder="Tìm kiếm component, tags, hoặc framework..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                  className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-300 bg-white shadow-sm hover:shadow-md text-base"
                 />
               </div>
-
-              {/* Category Filter */}
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white/50 backdrop-blur-sm transition-all duration-300"
-              >
-                {categories.map((cat) => (
-                  <option key={cat.value} value={cat.value}>
-                    {cat.label}
-                  </option>
-                ))}
-              </select>
             </div>
 
-            {/* Filters Row */}
-            <div className="grid md:grid-cols-3 gap-4 mb-4">
-              {/* Sort By */}
-              <select
-                value={sortBy}
-                onChange={(e) => {
-                  setSortBy(e.target.value)
-                  setPagination(prev => ({ ...prev, page: 1 }))
-                }}
-                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white/50 backdrop-blur-sm transition-all duration-300"
-              >
-                <option value="popular">Phổ biến nhất</option>
-                <option value="newest">Mới nhất</option>
-                <option value="mostLiked">Được yêu thích nhất</option>
-                <option value="name">Tên A-Z</option>
-              </select>
+            {/* Filters Grid - Aligned và đẹp */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              {/* Category Filter */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 px-1">Danh mục</label>
+                <div className="relative">
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-300 bg-white shadow-sm hover:shadow-md appearance-none cursor-pointer text-base"
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
               {/* Framework Filter */}
-              <select
-                value={selectedFramework}
-                onChange={(e) => {
-                  setSelectedFramework(e.target.value)
-                  setPagination(prev => ({ ...prev, page: 1 }))
-                }}
-                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white/50 backdrop-blur-sm transition-all duration-300"
-              >
-                <option value="all">Tất cả Framework</option>
-                <option value="react">React</option>
-                <option value="vue">Vue</option>
-                <option value="html">HTML</option>
-                <option value="tailwind">Tailwind</option>
-              </select>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 px-1">Framework</label>
+                <div className="relative">
+                  <select
+                    value={selectedFramework}
+                    onChange={(e) => {
+                      setSelectedFramework(e.target.value)
+                      setPagination(prev => ({ ...prev, page: 1 }))
+                    }}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-300 bg-white shadow-sm hover:shadow-md appearance-none cursor-pointer text-base"
+                  >
+                    <option value="all">Tất cả Framework</option>
+                    <option value="react">React</option>
+                    <option value="vue">Vue</option>
+                    <option value="html">HTML</option>
+                    <option value="tailwind">Tailwind</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Sort By */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 px-1">Sắp xếp</label>
+                <div className="relative">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => {
+                      setSortBy(e.target.value)
+                      setPagination(prev => ({ ...prev, page: 1 }))
+                    }}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-300 bg-white shadow-sm hover:shadow-md appearance-none cursor-pointer text-base"
+                  >
+                    <option value="popular">Phổ biến nhất</option>
+                    <option value="newest">Mới nhất</option>
+                    <option value="mostLiked">Được yêu thích nhất</option>
+                    <option value="name">Tên A-Z</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
-            {/* Results Count */}
-            <div className="text-sm text-gray-600 text-center">
-              Tìm thấy <span className="font-semibold text-indigo-600">{pagination.total}</span> components
-              {pagination.totalPages > 1 && (
-                <span className="ml-2">
-                  (Trang {pagination.page}/{pagination.totalPages})
+            {/* Results Count - Centered */}
+            <div className="text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 rounded-full">
+                <span className="text-sm text-gray-700">
+                  Tìm thấy <span className="font-bold text-indigo-600">{pagination.total}</span> components
                 </span>
-              )}
+                {pagination.totalPages > 1 && (
+                  <span className="text-sm text-gray-500">
+                    • Trang <span className="font-semibold">{pagination.page}/{pagination.totalPages}</span>
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </div>

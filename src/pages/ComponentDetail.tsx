@@ -214,7 +214,7 @@ const ComponentDetail = () => {
           </div>
         </motion.div>
 
-        {/* Live Preview (Left) & Code (Right) */}
+        {/* Live Preview (Left) & Code (Right) - Grid Layout */}
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
           {/* Left: Live Preview */}
           <motion.div
@@ -224,8 +224,8 @@ const ComponentDetail = () => {
             className="relative group"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
-              <div className="p-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-200/50 flex items-center justify-between">
+            <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden h-full flex flex-col">
+              <div className="p-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-200/50 flex items-center justify-between flex-shrink-0">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
@@ -234,7 +234,7 @@ const ComponentDetail = () => {
                 </div>
                 <ExternalLink className="w-4 h-4 text-gray-400" />
               </div>
-              <div className="p-6 bg-gradient-to-br from-gray-100 via-gray-50 to-white">
+              <div className="p-6 bg-gradient-to-br from-gray-100 via-gray-50 to-white flex-1 flex flex-col">
                 <iframe
                   srcDoc={`
                     <!DOCTYPE html>
@@ -248,52 +248,51 @@ const ComponentDetail = () => {
                       </body>
                     </html>
                   `}
-                  className="w-full h-[600px] border-2 border-gray-200 rounded-xl bg-white shadow-inner"
+                  className="w-full flex-1 border-2 border-gray-200 rounded-xl bg-white shadow-inner min-h-[600px]"
                   title="Component Preview"
                   sandbox="allow-scripts allow-same-origin"
                 />
               </div>
+              {/* Action buttons below preview */}
+              <div className="p-4 bg-gray-50/50 border-t border-gray-200/50 flex items-center justify-center gap-4 flex-shrink-0">
+                <motion.button
+                  onClick={handleLike}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 rounded-xl text-red-600 font-semibold transition-colors"
+                >
+                  <Heart className={`w-5 h-5 ${component.likes > 0 ? 'fill-red-600' : ''}`} />
+                  <span>{component.likes}</span>
+                </motion.button>
+                <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-xl text-blue-600 font-semibold">
+                  <Eye className="w-5 h-5" />
+                  <span>{component.views}</span>
+                </div>
+                {isAuthenticated && (
+                  <motion.button
+                    onClick={handleFavorite}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold transition-colors ${
+                      isFavorited
+                        ? 'bg-indigo-100 text-indigo-600'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Heart className={`w-5 h-5 ${isFavorited ? 'fill-indigo-600' : ''}`} />
+                    <span>{isFavorited ? 'Favorited' : 'Favorite'}</span>
+                  </motion.button>
+                )}
+              </div>
             </div>
           </motion.div>
-
-          {/* Stats với Favorite button */}
-          <div className="flex items-center gap-4 mt-4">
-            <motion.button
-              onClick={handleLike}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.9 }}
-              className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 rounded-xl text-red-600 font-semibold transition-colors"
-            >
-              <Heart className={`w-5 h-5 ${component.likes > 0 ? 'fill-red-600' : ''}`} />
-              <span>{component.likes}</span>
-            </motion.button>
-            <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-xl text-blue-600 font-semibold">
-              <Eye className="w-5 h-5" />
-              <span>{component.views}</span>
-            </div>
-            {isAuthenticated && (
-              <motion.button
-                onClick={handleFavorite}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.9 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold transition-colors ${
-                  isFavorited
-                    ? 'bg-indigo-100 text-indigo-600'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                <Heart className={`w-5 h-5 ${isFavorited ? 'fill-indigo-600' : ''}`} />
-                <span>{isFavorited ? 'Favorited' : 'Favorite'}</span>
-              </motion.button>
-            )}
-          </div>
 
           {/* Right: Code Editor */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden"
+            className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden h-full flex flex-col"
           >
             {/* Code Tabs */}
             <div className="border-b border-gray-200/50 bg-gray-50/50 backdrop-blur-sm flex">
@@ -313,7 +312,7 @@ const ComponentDetail = () => {
             </div>
 
             {/* Code Display */}
-            <div className="p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-[600px] max-h-[600px] overflow-auto">
+            <div className="p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex-1 overflow-auto min-h-[600px]">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-yellow-400" />
