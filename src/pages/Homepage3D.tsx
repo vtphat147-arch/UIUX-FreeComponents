@@ -1,46 +1,52 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { motion } from 'framer-motion'
-import Lenis from 'lenis'
 import Header from '../cpnents/Header'
-import { Hero } from '../components/sections/Hero'
-import { Features } from '../components/sections/Features'
-import { Showcase } from '../components/sections/Showcase'
-import { Testimonials } from '../components/sections/Testimonials'
-import { CTA } from '../components/sections/CTA'
 import { designService, DesignComponent } from '../services/api'
 import { useScrollProgress } from '../hooks/useScrollProgress'
+
+// Lazy load 3D components để tránh SSR issues
+const Hero = lazy(() => import('../components/sections/Hero').then(m => ({ default: m.Hero })))
+const Features = lazy(() => import('../components/sections/Features').then(m => ({ default: m.Features })))
+const Showcase = lazy(() => import('../components/sections/Showcase').then(m => ({ default: m.Showcase })))
+const Testimonials = lazy(() => import('../components/sections/Testimonials').then(m => ({ default: m.Testimonials })))
+const CTA = lazy(() => import('../components/sections/CTA').then(m => ({ default: m.CTA })))
 
 const Homepage3D = () => {
   const [components, setComponents] = useState<DesignComponent[]>([])
   const { scrollProgress } = useScrollProgress()
 
   useEffect(() => {
-    // Smooth scroll với Lenis - chỉ trên desktop
+    // Dynamic import Lenis để tránh SSR issues
     if (typeof window === 'undefined') return
     
-    const isMobile = window.innerWidth < 768
-    if (!isMobile) {
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        touchMultiplier: 2,
-      })
+    import('lenis').then((LenisModule) => {
+      const Lenis = LenisModule.default
+      const isMobile = window.innerWidth < 768
+      if (!isMobile) {
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: 'vertical',
+          gestureOrientation: 'vertical',
+          smoothWheel: true,
+          wheelMultiplier: 1,
+          touchMultiplier: 2,
+        })
 
-      function raf(time: number) {
-        lenis.raf(time)
+        function raf(time: number) {
+          lenis.raf(time)
+          requestAnimationFrame(raf)
+        }
+
         requestAnimationFrame(raf)
-      }
 
-      requestAnimationFrame(raf)
-
-      return () => {
-        lenis.destroy()
+        return () => {
+          lenis.destroy()
+        }
       }
-    }
+    }).catch((err) => {
+      console.warn('Lenis not available:', err)
+    })
 
     // Fetch components
     const fetchComponents = async () => {
@@ -77,11 +83,13 @@ const Homepage3D = () => {
       </div>
 
       {/* Sections */}
-      <Hero />
-      <Features />
-      <Showcase components={components} />
-      <Testimonials />
-      <CTA />
+      <Suspense fallback={<div className="h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-purple-900"><div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-500"></div></div>}>
+        <Hero />
+        <Features />
+        <Showcase components={components} />
+        <Testimonials />
+        <CTA />
+      </Suspense>
     </div>
   )
 }

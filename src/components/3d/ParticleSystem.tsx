@@ -66,3 +66,4 @@ export const ParticleSystem = ({ count = 2000, speed = 0.5, color = '#6366f1' }:
   )
 }
 
+

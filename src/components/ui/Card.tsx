@@ -23,3 +23,4 @@ export const Card = ({ children, className = '', hover = true }: CardProps) => {
   )
 }
 
+

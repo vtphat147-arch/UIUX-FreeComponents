@@ -10,6 +10,24 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    include: ['three', '@react-three/fiber', '@react-three/drei'],
+    esbuildOptions: {
+      target: 'es2020'
+    }
+  },
+  build: {
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true
+    },
+    rollupOptions: {
+      external: (id) => {
+        // Don't bundle SpotLight from drei if it causes issues
+        return false
+      }
+    }
+  }
 })
 
 
