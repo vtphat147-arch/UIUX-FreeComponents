@@ -7,6 +7,8 @@ import ComponentDetail from './pages/ComponentDetail'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
+import VerifyEmail from './pages/VerifyEmail'
+import RegisterSuccess from './pages/RegisterSuccess'
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path="/components/:id" element={<ComponentDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/register-success" element={<RegisterSuccess />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>

@@ -36,7 +36,10 @@ const Register = () => {
         password,
         fullName: fullName || undefined
       })
-      navigate('/')
+      // Show success message and redirect to info page
+      navigate('/register-success', { 
+        state: { email } 
+      })
     } catch (err: any) {
       setError(err.response?.data?.message || 'Đăng ký thất bại. Vui lòng thử lại.')
     } finally {
