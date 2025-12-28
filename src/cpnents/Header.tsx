@@ -4,17 +4,22 @@ import { Code2, Menu, X, Sparkles } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
 const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [shouldAnimate, setShouldAnimate] = useState(false)
   const location = useLocation()
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+    // Check if header animation has already been shown in this session
+    const hasAnimated = sessionStorage.getItem('headerAnimated')
+    
+    if (!hasAnimated) {
+      // First time in this session - show animation
+      setShouldAnimate(true)
+      sessionStorage.setItem('headerAnimated', 'true')
+    } else {
+      // Already animated - skip animation
+      setShouldAnimate(false)
     }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   const navItems = [
@@ -32,14 +37,10 @@ const Header = () => {
 
   return (
     <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
+      initial={shouldAnimate ? { y: -100, opacity: 0 } : { y: 0, opacity: 1 }}
+      animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/80 backdrop-blur-xl shadow-lg border-b border-white/20'
-          : 'bg-transparent'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl shadow-md border-b border-gray-200/50"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
