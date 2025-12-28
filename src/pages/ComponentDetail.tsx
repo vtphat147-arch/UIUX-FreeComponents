@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Eye, Heart, Copy, Check, ExternalLink, Sparkles, Code2, Sun, Moon } from 'lucide-react'
+import { ArrowLeft, Eye, Heart, Copy, Check, ExternalLink, Sparkles, Code2 } from 'lucide-react'
 import Header from '../cpnents/Header'
 import { designService, DesignComponent } from '../services/api'
 import { useAuth } from '../contexts/AuthContext'
@@ -22,7 +22,6 @@ const ComponentDetail = () => {
   const [copied, setCopied] = useState<string | null>(null)
   const [isFavorited, setIsFavorited] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(false)
   const { isAuthenticated } = useAuth()
 
   useEffect(() => {
@@ -264,39 +263,17 @@ const ComponentDetail = () => {
                   <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
                   <h3 className="ml-3 text-lg font-bold text-gray-900">Live Preview</h3>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2">
-                    <Sun className="w-4 h-4 text-gray-500" />
-                    <DarkModeToggle onToggle={setIsDarkMode} />
-                    <Moon className="w-4 h-4 text-gray-500" />
-                  </div>
-                  <ExternalLink className="w-4 h-4 text-gray-400" />
-                </div>
+                <ExternalLink className="w-4 h-4 text-gray-400" />
               </div>
-              <div className={`p-6 flex-1 flex flex-col transition-colors duration-300 ${
-                isDarkMode 
-                  ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
-                  : 'bg-gradient-to-br from-gray-100 via-gray-50 to-white'
-              }`}>
+              <div className="p-6 bg-gradient-to-br from-gray-100 via-gray-50 to-white flex-1 flex flex-col">
                 <iframe
                   srcDoc={`
                     <!DOCTYPE html>
                     <html>
                       <head>
-                        <style>
-                          ${isDarkMode ? `
-                            * {
-                              color-scheme: dark;
-                            }
-                            body {
-                              background-color: #111827;
-                              color: #f9fafb;
-                            }
-                          ` : ''}
-                          ${component.cssCode}
-                        </style>
+                        <style>${component.cssCode}</style>
                       </head>
-                      <body style="margin: 0; padding: 20px; ${isDarkMode ? 'background-color: #111827; color: #f9fafb;' : ''}">
+                      <body style="margin: 0; padding: 20px;">
                         ${component.htmlCode}
                         ${component.jsCode ? `<script>${component.jsCode}</script>` : ''}
                       </body>
