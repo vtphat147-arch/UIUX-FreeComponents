@@ -132,6 +132,21 @@ canvas {
   p {
     line-height: 1.6;
   }
+
+  /* Ensure select and option elements have proper text color */
+  select {
+    color: #111827 !important; /* text-gray-900 */
+  }
+
+  select option {
+    color: #111827 !important; /* text-gray-900 */
+    background-color: white;
+  }
+
+  select:disabled,
+  select:disabled option {
+    color: #6b7280 !important; /* text-gray-500 */
+  }
 }
 
 @layer components {
