@@ -154,16 +154,33 @@ const VipPlansModal = ({ isOpen, onClose }: VipPlansModalProps) => {
                 <div className="py-12 text-center bg-gray-50 rounded-xl p-8">
                   <Crown className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Chưa có gói VIP</h3>
-                  <p className="text-gray-600 mb-4">Hiện tại chưa có gói VIP nào khả dụng trong hệ thống.</p>
-                  <p className="text-sm text-gray-500 mb-6">
-                    Vui lòng đợi admin thiết lập các gói VIP hoặc liên hệ hỗ trợ.
+                  <p className="text-gray-600 mb-2">Hiện tại chưa có gói VIP nào khả dụng trong hệ thống.</p>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Vui lòng kiểm tra:
                   </p>
-                  <button
-                    onClick={onClose}
-                    className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-                  >
-                    Đóng
-                  </button>
+                  <ul className="text-sm text-left text-gray-600 mb-6 space-y-1 max-w-md mx-auto">
+                    <li>• Đã chạy SQL script <code className="bg-gray-200 px-1 rounded">vip-system-setup.sql</code></li>
+                    <li>• Database có bảng <code className="bg-gray-200 px-1 rounded">VipPlans</code></li>
+                    <li>• Có plans với <code className="bg-gray-200 px-1 rounded">IsActive = TRUE</code></li>
+                    <li>• API endpoint <code className="bg-gray-200 px-1 rounded">/api/payments/plans</code> hoạt động</li>
+                  </ul>
+                  <div className="flex gap-3 justify-center">
+                    <button
+                      onClick={() => {
+                        console.log('🔄 Reloading plans...')
+                        loadPlans()
+                      }}
+                      className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                    >
+                      Thử lại
+                    </button>
+                    <button
+                      onClick={onClose}
+                      className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      Đóng
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="grid md:grid-cols-3 gap-6">
