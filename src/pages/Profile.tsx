@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Heart, Eye, Edit2, Save, X, Mail, Code2 } from 'lucide-react'
+import { Heart, Eye, Edit2, Save, X, Mail, Code2, Crown, Sparkles } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Header from '../cpnents/Header'
 import { useAuth } from '../contexts/AuthContext'
 import { userService, UserProfile, Favorite, ViewHistoryItem } from '../services/userService'
 import { Link } from 'react-router-dom'
 import ComponentPreview from '../components/ComponentPreview'
+import { useVipStatus } from '../hooks/useVipStatus'
+import VipPlansModal from '../components/VipPlansModal'
+import { vipService, Payment } from '../services/vipService'
 
 const Profile = () => {
   const { user } = useAuth()
@@ -15,8 +18,11 @@ const Profile = () => {
   const [favorites, setFavorites] = useState<Favorite[]>([])
   const [viewHistory, setViewHistory] = useState<ViewHistoryItem[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<'profile' | 'favorites' | 'history'>('profile')
+  const [activeTab, setActiveTab] = useState<'profile' | 'favorites' | 'history' | 'vip'>('profile')
   const [isEditing, setIsEditing] = useState(false)
+  const [showVipModal, setShowVipModal] = useState(false)
+  const [paymentHistory, setPaymentHistory] = useState<Payment[]>([])
+  const { vipStatus, refreshStatus } = useVipStatus()
   const [editData, setEditData] = useState({
     username: '',
     fullName: '',
@@ -36,14 +42,16 @@ const Profile = () => {
   const loadData = async () => {
     try {
       setLoading(true)
-      const [profileData, favoritesData, historyData] = await Promise.all([
+      const [profileData, favoritesData, historyData, paymentsData] = await Promise.all([
         userService.getProfile(),
         userService.getFavorites().catch(() => []),
-        userService.getViewHistory(1, 10).catch(() => ({ data: [], page: 1, pageSize: 10, total: 0, totalPages: 0 }))
+        userService.getViewHistory(1, 10).catch(() => ({ data: [], page: 1, pageSize: 10, total: 0, totalPages: 0 })),
+        vipService.getPaymentHistory().catch(() => [])
       ])
       setProfile(profileData)
       setFavorites(favoritesData)
       setViewHistory(historyData?.data || [])
+      setPaymentHistory(paymentsData)
       setEditData({
         username: profileData.username,
         fullName: profileData.fullName || '',
@@ -166,7 +174,15 @@ const Profile = () => {
               ) : (
                 <>
                   <div className="flex items-center justify-between mb-2">
-                    <h1 className="text-3xl font-bold text-gray-900">{profile?.username}</h1>
+                    <div className="flex items-center gap-3">
+                      <h1 className="text-3xl font-bold text-gray-900">{profile?.username}</h1>
+                      {vipStatus.isVip && (
+                        <span className="px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full text-sm font-semibold flex items-center gap-1">
+                          <Crown className="w-4 h-4" />
+                          VIP
+                        </span>
+                      )}
+                    </div>
                     <button
                       onClick={() => setIsEditing(true)}
                       className="p-2 text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
@@ -229,6 +245,19 @@ const Profile = () => {
               <div className="flex items-center justify-center gap-2">
                 <Eye className="w-4 h-4" />
                 View History
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('vip')}
+              className={`flex-1 px-6 py-4 font-semibold transition-colors ${
+                activeTab === 'vip'
+                  ? 'text-indigo-600 border-b-2 border-indigo-600'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <Crown className="w-4 h-4" />
+                VIP
               </div>
             </button>
           </div>
@@ -395,6 +424,15 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      <VipPlansModal
+        isOpen={showVipModal}
+        onClose={() => {
+          setShowVipModal(false)
+          refreshStatus()
+          loadData()
+        }}
+      />
     </div>
   )
 }

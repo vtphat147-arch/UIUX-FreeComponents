@@ -34,7 +34,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             fullName: profile.fullName,
             avatarUrl: profile.avatarUrl,
             bio: profile.bio,
-            isAdmin: profile.isAdmin
+            isAdmin: profile.isAdmin,
+            isVip: profile.isVip,
+            vipExpiresAt: profile.vipExpiresAt,
+            daysRemaining: profile.daysRemaining
           })
         } catch (error) {
           // Token is invalid, remove it

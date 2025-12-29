@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Code2, FileCode, Copy, Check, ChevronDown, ChevronUp } from 'lucide-react'
+import { Code2, FileCode, Copy, Check, ChevronDown, ChevronUp, Crown } from 'lucide-react'
 import { DesignComponent } from '../services/api'
+import { useVipStatus } from '../hooks/useVipStatus'
+import VipRequiredModal from './VipRequiredModal'
 
 interface FrameworkCodeGeneratorProps {
   component: DesignComponent
@@ -13,6 +15,8 @@ const FrameworkCodeGenerator = ({ component }: FrameworkCodeGeneratorProps) => {
   const [selectedFramework, setSelectedFramework] = useState<Framework>('react')
   const [copied, setCopied] = useState<string | null>(null)
   const [isOpen, setIsOpen] = useState(true)
+  const [showVipModal, setShowVipModal] = useState(false)
+  const { vipStatus } = useVipStatus()
 
 
   const convertHtmlToJsx = (html: string): string => {
@@ -134,12 +138,21 @@ ${component.cssCode}
   return (
     <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 overflow-hidden">
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
+        onClick={() => {
+          if (!vipStatus.isVip) {
+            setShowVipModal(true)
+            return
+          }
+          setIsOpen(!isOpen)
+        }}
+        className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors relative"
       >
         <div className="flex items-center gap-3">
           <Code2 className="w-6 h-6 text-indigo-600" />
           <h3 className="text-xl font-bold text-gray-900">Framework Code Generator</h3>
+          {!vipStatus.isVip && (
+            <Crown className="w-5 h-5 text-amber-500" />
+          )}
         </div>
         {isOpen ? (
           <ChevronUp className="w-5 h-5 text-gray-500" />
@@ -149,7 +162,7 @@ ${component.cssCode}
       </button>
 
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && vipStatus.isVip && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
@@ -220,6 +233,12 @@ ${component.cssCode}
           </motion.div>
         )}
       </AnimatePresence>
+
+      <VipRequiredModal
+        isOpen={showVipModal}
+        onClose={() => setShowVipModal(false)}
+        message="Framework Code Generator chỉ dành cho thành viên VIP. Nâng cấp ngay để chuyển đổi code sang React, Vue, Angular!"
+      />
     </div>
   )
 }

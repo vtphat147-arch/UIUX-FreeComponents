@@ -19,6 +19,7 @@ export interface DesignComponent {
   framework?: string | null
   views: number
   likes: number
+  isPremium?: boolean
   createdAt: string
   updatedAt: string
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Eye, Heart, Copy, Check, Sparkles, Code2, Maximize2 } from 'lucide-react'
+import { ArrowLeft, Eye, Heart, Copy, Check, Sparkles, Code2, Maximize2, Crown } from 'lucide-react'
 import Header from '../cpnents/Header'
 import { designService, DesignComponent } from '../services/api'
 import { useAuth } from '../contexts/AuthContext'
@@ -12,6 +12,8 @@ import ShareDropdown from '../components/ShareDropdown'
 import ExportDropdown from '../components/ExportDropdown'
 import FrameworkCodeGenerator from '../components/FrameworkCodeGenerator'
 import FullscreenPreview from '../components/FullscreenPreview'
+import VipRequiredModal from '../components/VipRequiredModal'
+import { useVipStatus } from '../hooks/useVipStatus'
 
 const ComponentDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -24,15 +26,27 @@ const ComponentDetail = () => {
   const [isFavorited, setIsFavorited] = useState(false)
   const [isFullscreenPreview, setIsFullscreenPreview] = useState(false)
   const [flyingHearts, setFlyingHearts] = useState<Array<{ id: number; x: number; y: number }>>([])
+  const [showVipModal, setShowVipModal] = useState(false)
   const { isAuthenticated } = useAuth()
+  const { vipStatus } = useVipStatus()
 
   useEffect(() => {
     const fetchComponent = async () => {
       if (!id) return
       try {
         setLoading(true)
-        const data = await designService.getComponentById(parseInt(id))
-        setComponent(data)
+        try {
+          const data = await designService.getComponentById(parseInt(id))
+          setComponent(data)
+        } catch (err: any) {
+          // Check if it's a VIP required error
+          if (err.response?.status === 403 && err.response?.data?.requiresVip) {
+            setShowVipModal(true)
+            setLoading(false)
+            return
+          }
+          throw err
+        }
         
         // Check if favorited (if authenticated)
         if (isAuthenticated && data.id) {
@@ -561,6 +575,15 @@ const ComponentDetail = () => {
           />
         )}
       </div>
+
+      <VipRequiredModal
+        isOpen={showVipModal}
+        onClose={() => {
+          setShowVipModal(false)
+          navigate('/components')
+        }}
+        message="Component này yêu cầu tài khoản VIP để xem. Nâng cấp ngay để trải nghiệm đầy đủ!"
+      />
     </div>
   )
 }

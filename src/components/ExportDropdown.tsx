@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Download, FileText, Code, FileCode, Archive, Copy, Check, ChevronDown } from 'lucide-react'
+import { Download, FileText, Code, FileCode, Archive, Copy, Check, ChevronDown, Crown } from 'lucide-react'
 import { DesignComponent } from '../services/api'
+import { useVipStatus } from '../hooks/useVipStatus'
+import VipRequiredModal from './VipRequiredModal'
 
 interface ExportDropdownProps {
   component: DesignComponent
@@ -12,8 +14,10 @@ const ExportDropdown = ({ component }: ExportDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [copied, setCopied] = useState<string | null>(null)
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
+  const [showVipModal, setShowVipModal] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const { vipStatus } = useVipStatus()
 
   // Calculate dropdown position when opened
   useEffect(() => {
@@ -112,6 +116,13 @@ ${component.jsCode}
   }
 
   const downloadZIP = async () => {
+    // Check VIP status
+    if (!vipStatus.isVip) {
+      setIsOpen(false)
+      setShowVipModal(true)
+      return
+    }
+
     try {
       const JSZip = (await import('jszip')).default
       const zip = new JSZip()
@@ -222,7 +233,8 @@ ${component.jsCode}
       name: 'Download ZIP',
       icon: Archive,
       onClick: downloadZIP,
-      color: 'text-green-600 dark:text-green-400'
+      color: 'text-green-600 dark:text-green-400',
+      isVip: true
     },
     {
       name: copied === 'all' ? 'Copied!' : 'Copy All Code',
@@ -279,6 +291,7 @@ ${component.jsCode}
               <div className="p-2">
                 {exportOptions.map((option, index) => {
                   const Icon = option.icon
+                  const isVipOnly = (option as any).isVip && !vipStatus.isVip
                   return (
                     <motion.button
                       key={option.name}
@@ -289,10 +302,13 @@ ${component.jsCode}
                       disabled={option.disabled}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all hover:bg-gray-50 dark:hover:bg-gray-700 ${
                         option.disabled ? 'opacity-50 cursor-not-allowed' : option.color
-                      }`}
+                      } ${isVipOnly ? 'relative' : ''}`}
                     >
                       <Icon className="w-5 h-5" />
-                      <span>{option.name}</span>
+                      <span className="flex-1 text-left">{option.name}</span>
+                      {isVipOnly && (
+                        <Crown className="w-4 h-4 text-amber-500" />
+                      )}
                     </motion.button>
                   )
                 })}
@@ -302,6 +318,12 @@ ${component.jsCode}
         </AnimatePresence>,
         document.body
       )}
+
+      <VipRequiredModal
+        isOpen={showVipModal}
+        onClose={() => setShowVipModal(false)}
+        message="Tính năng Export ZIP chỉ dành cho thành viên VIP. Nâng cấp ngay để sử dụng!"
+      />
     </div>
   )
 }

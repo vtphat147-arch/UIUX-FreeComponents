@@ -24,6 +24,9 @@ export interface AuthResponse {
     avatarUrl?: string
     bio?: string
     isAdmin: boolean
+    isVip?: boolean
+    vipExpiresAt?: string | null
+    daysRemaining?: number | null
   }
 }
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Search, Eye, Heart, Code2, Layout, Type, Menu, Navigation, Grid } from 'lucide-react'
+import { Search, Eye, Heart, Code2, Layout, Type, Menu, Navigation, Grid, Crown } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
 import Header from '../cpnents/Header'
 import { designService, DesignComponent } from '../services/api'
@@ -254,6 +254,12 @@ const Components = () => {
                       <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold z-10">
                         {component.category}
                       </div>
+                      {component.isPremium && (
+                        <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-orange-500 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold z-10 flex items-center gap-1">
+                          <Crown className="w-3 h-3" />
+                          Premium
+                        </div>
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10" />
                     </div>
                   </Link>
