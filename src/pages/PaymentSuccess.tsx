@@ -47,7 +47,7 @@ const PaymentSuccess = () => {
         let attempts = 0
         const maxAttempts = 5 // Reduced from 20 to 5 (10 seconds max)
         const pollInterval = 2000 // 2 seconds
-        let pollTimer: NodeJS.Timeout | null = null
+        let pollTimer: ReturnType<typeof setTimeout> | null = null
 
         const poll = async () => {
           try {
@@ -62,11 +62,7 @@ const PaymentSuccess = () => {
               if (pollTimer) clearTimeout(pollTimer)
               
               // Refresh user context immediately
-              if (window.location.reload) {
-                setTimeout(() => {
-                  window.location.reload()
-                }, 1500)
-              }
+              await refreshUser()
               return
             } else if (result.status === 'cancelled' || result.status === 'failed') {
               setStatus('failed')
@@ -118,7 +114,7 @@ const PaymentSuccess = () => {
     }
 
     verifyPayment()
-  }, [orderCode, user])
+  }, [orderCode, refreshUser])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
