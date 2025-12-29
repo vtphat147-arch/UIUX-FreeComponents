@@ -31,16 +31,13 @@ const VipPlansModal = ({ isOpen, onClose }: VipPlansModalProps) => {
     try {
       setLoadingPlans(true)
       const data = await vipService.getPlans()
-      console.log('✅ Loaded VIP plans:', data)
       if (data && data.length > 0) {
         setPlans(data)
       } else {
-        console.warn('⚠️ No VIP plans found. Please run SQL migration: vip-system-setup.sql')
         setPlans([])
       }
     } catch (err: any) {
-      console.error('❌ Error loading VIP plans:', err)
-      console.error('Error details:', err.response?.data || err.message)
+      console.error('Error loading VIP plans:', err)
       setPlans([])
     } finally {
       setLoadingPlans(false)
@@ -166,10 +163,7 @@ const VipPlansModal = ({ isOpen, onClose }: VipPlansModalProps) => {
                   </ul>
                   <div className="flex gap-3 justify-center">
                     <button
-                      onClick={() => {
-                        console.log('🔄 Reloading plans...')
-                        loadPlans()
-                      }}
+                      onClick={() => loadPlans()}
                       className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
                     >
                       Thử lại

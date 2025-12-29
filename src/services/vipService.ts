@@ -56,43 +56,20 @@ export const vipService = {
   async getPlans(): Promise<VipPlan[]> {
     try {
       const url = `${baseURL}/payments/plans`
-      console.log('📞 Calling API:', url)
       const response = await axios.get(url, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         }
       })
-      console.log('✅ Response status:', response.status)
-      console.log('📦 Raw response data:', response.data)
-      console.log('📦 Response type:', typeof response.data, Array.isArray(response.data))
       
-      if (!response.data) {
-        console.warn('⚠️ Response data is null or undefined')
+      if (!response.data || !Array.isArray(response.data)) {
         return []
       }
       
-      if (!Array.isArray(response.data)) {
-        console.error('❌ Response is not an array:', typeof response.data)
-        console.error('❌ Response value:', response.data)
-        return []
-      }
-      
-      const plans = response.data as VipPlan[]
-      console.log('✅ Plans count:', plans.length)
-      console.log('✅ Plans data:', JSON.stringify(plans, null, 2))
-      return plans
+      return response.data as VipPlan[]
     } catch (err: any) {
-      console.error('❌ Error getting VIP plans:', err)
-      if (err.response) {
-        console.error('❌ Error status:', err.response.status)
-        console.error('❌ Error data:', err.response.data)
-        console.error('❌ Error headers:', err.response.headers)
-      } else if (err.request) {
-        console.error('❌ No response received:', err.request)
-      } else {
-        console.error('❌ Error message:', err.message)
-      }
+      console.error('Error getting VIP plans:', err)
       return []
     }
   },
