@@ -11,14 +11,13 @@ const PaymentSuccess = () => {
   const navigate = useNavigate()
   const { refreshUser } = useAuth()
   const [status, setStatus] = useState<'loading' | 'success' | 'failed'>('loading')
-  const [vipStatus, setVipStatus] = useState<any>(null)
+  const [vipStatus, setVipStatus] = useState<{ isVip: boolean; expiresAt: string | null; daysRemaining: number | null } | null>(null)
   
   // Get PayOS return URL params
   const orderCode = searchParams.get('orderCode')
   const payOSCode = searchParams.get('code') // "00" = success
   const payOSStatus = searchParams.get('status') // PAID, PENDING, PROCESSING, CANCELLED
   const isCancel = searchParams.get('cancel') === 'true'
-  const paymentLinkId = searchParams.get('id')
 
   useEffect(() => {
     const verifyPayment = async () => {
