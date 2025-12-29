@@ -494,28 +494,50 @@ const Profile = () => {
                   ) : (
                     <div className="space-y-3">
                       {paymentHistory.map((payment) => (
-                        <div key={payment.id} className="bg-white border border-gray-200 rounded-lg p-4">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="font-semibold text-gray-900">{payment.vipPlan.name}</p>
-                              <p className="text-sm text-gray-600">
-                                {new Date(payment.createdAt).toLocaleDateString('vi-VN')}
-                              </p>
+                        <div key={payment.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <p className="font-semibold text-gray-900">{payment.vipPlan.name}</p>
+                                <span className={`text-xs px-2 py-1 rounded-full ${
+                                  payment.status === 'completed' 
+                                    ? 'bg-green-100 text-green-700' 
+                                    : payment.status === 'pending'
+                                    ? 'bg-yellow-100 text-yellow-700'
+                                    : 'bg-red-100 text-red-700'
+                                }`}>
+                                  {payment.status === 'completed' ? 'Hoàn thành' : 
+                                   payment.status === 'pending' ? 'Đang xử lý' : 'Thất bại'}
+                                </span>
+                              </div>
+                              <div className="space-y-1 text-sm text-gray-600">
+                                <p>
+                                  <span className="font-medium">Ngày thanh toán:</span>{' '}
+                                  {payment.completedAt 
+                                    ? new Date(payment.completedAt).toLocaleDateString('vi-VN', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                      })
+                                    : payment.status === 'pending' 
+                                    ? 'Đang chờ xử lý...'
+                                    : new Date(payment.createdAt).toLocaleDateString('vi-VN', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                      })}
+                                </p>
+                                <p>
+                                  <span className="font-medium">Thời hạn:</span> {payment.vipPlan.days} ngày
+                                </p>
+                              </div>
                             </div>
-                            <div className="text-right">
-                              <p className="font-semibold text-gray-900">
+                            <div className="text-right ml-4">
+                              <p className="font-bold text-lg text-gray-900">
                                 {new Intl.NumberFormat('vi-VN').format(payment.amount)} VNĐ
                               </p>
-                              <span className={`text-xs px-2 py-1 rounded-full ${
-                                payment.status === 'completed' 
-                                  ? 'bg-green-100 text-green-700' 
-                                  : payment.status === 'pending'
-                                  ? 'bg-yellow-100 text-yellow-700'
-                                  : 'bg-red-100 text-red-700'
-                              }`}>
-                                {payment.status === 'completed' ? 'Hoàn thành' : 
-                                 payment.status === 'pending' ? 'Đang xử lý' : 'Thất bại'}
-                              </span>
                             </div>
                           </div>
                         </div>
