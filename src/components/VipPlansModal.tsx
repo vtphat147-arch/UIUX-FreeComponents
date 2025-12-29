@@ -31,11 +31,17 @@ const VipPlansModal = ({ isOpen, onClose }: VipPlansModalProps) => {
     try {
       setLoadingPlans(true)
       const data = await vipService.getPlans()
-      console.log('Loaded plans:', data)
-      setPlans(data)
-    } catch (err) {
-      console.error('Error loading plans:', err)
-      alert('Không thể tải danh sách gói VIP. Vui lòng thử lại sau.')
+      console.log('✅ Loaded VIP plans:', data)
+      if (data && data.length > 0) {
+        setPlans(data)
+      } else {
+        console.warn('⚠️ No VIP plans found. Please run SQL migration: vip-system-setup.sql')
+        setPlans([])
+      }
+    } catch (err: any) {
+      console.error('❌ Error loading VIP plans:', err)
+      console.error('Error details:', err.response?.data || err.message)
+      setPlans([])
     } finally {
       setLoadingPlans(false)
     }
