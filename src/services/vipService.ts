@@ -55,10 +55,17 @@ export const vipService = {
 
   async getPlans(): Promise<VipPlan[]> {
     try {
+      console.log('📞 Calling API:', `${baseURL}/payments/plans`)
       const response = await axios.get<VipPlan[]>(`${baseURL}/payments/plans`)
-      return response.data
-    } catch (err) {
-      console.error('Error getting VIP plans:', err)
+      console.log('📦 API Response:', response.data)
+      console.log('📦 Response type:', typeof response.data, Array.isArray(response.data))
+      console.log('📦 Plans count:', response.data?.length || 0)
+      return response.data || []
+    } catch (err: any) {
+      console.error('❌ Error getting VIP plans:', err)
+      console.error('❌ Error response:', err.response?.data)
+      console.error('❌ Error status:', err.response?.status)
+      console.error('❌ Error message:', err.message)
       return []
     }
   },
