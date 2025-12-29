@@ -11,6 +11,7 @@ import VerifyEmail from './pages/VerifyEmail'
 import RegisterSuccess from './pages/RegisterSuccess'
 import ComponentEditorPage from './pages/ComponentEditorPage'
 import PaymentSuccess from './pages/PaymentSuccess'
+import PaymentCancel from './pages/PaymentCancel'
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/editor" element={<ComponentEditorPage />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
-          <Route path="/payment-cancel" element={<PaymentSuccess />} />
+          <Route path="/payment-cancel" element={<PaymentCancel />} />
         </Routes>
       </Router>
     </AuthProvider>
