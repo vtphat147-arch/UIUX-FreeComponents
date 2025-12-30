@@ -10,7 +10,6 @@ const PaymentCancel = () => {
   // Get PayOS cancel URL params (same as returnUrl but with cancel=true)
   const orderCode = searchParams.get('orderCode')
   const payOSStatus = searchParams.get('status') // Usually CANCELLED
-  const payOSCode = searchParams.get('code')
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
